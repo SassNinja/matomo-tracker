@@ -1,6 +1,6 @@
 {
   "name": "@sassninja/matomo-tracker-react",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Matomo tracker for react projects",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -36,7 +36,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sassninja/matomo-tracker-js": "^0.4.0"
+    "@sassninja/matomo-tracker-js": "^0.5.0"
   },
   "peerDependencies": {
     "react": "^16.8.6 || ^17.0.0"
