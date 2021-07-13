@@ -17,6 +17,7 @@ Prefix the change with one of these keywords:
 ## [0.5.0]
 
 - Added: `removeEcommerceItem` and `clearEcommerceCart` action
+- Added: `getEcommerceItems` getter
 
 ## [0.4.0]
 

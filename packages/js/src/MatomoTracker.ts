@@ -1,5 +1,7 @@
 import { TRACK_TYPES } from './constants'
 import {
+  AsyncTracker,
+  EcommerceItems,
   AddEcommerceItemParams,
   RemoveEcommerceItemParams,
   CustomDimension,
@@ -15,6 +17,8 @@ import {
 
 class MatomoTracker {
   mutationObserver?: MutationObserver
+
+  private asyncTrackers?: AsyncTracker[]
 
   constructor(userOptions: UserOptions) {
     if (!userOptions.urlBase) {
@@ -54,6 +58,8 @@ class MatomoTracker {
     if (disabled) {
       return
     }
+
+    this.asyncTrackers = window.Matomo.getAsyncTrackers()
 
     this.pushInstruction(
       'setTrackerUrl',
@@ -247,6 +253,12 @@ class MatomoTracker {
     this.pushInstruction('clearEcommerceCart')
   }
 
+  // Return all ecommerce items currently in the untracked ecommerce order.
+  // https://matomo.org/docs/ecommerce-analytics
+  getEcommerceItems(): EcommerceItems {
+    return this.callMethod('getEcommerceItems') as EcommerceItems
+  }
+
   // Tracks an Ecommerce order containing items added via addEcommerceItem.
   // https://matomo.org/docs/ecommerce-analytics/#2-trackecommerceorderorderid-revenue-subtotal-tax-shipping-discount
   trackEcommerceOrder({
@@ -326,6 +338,25 @@ class MatomoTracker {
       this.pushInstruction('setDocumentTitle', documentTitle)
       this.pushInstruction(...(data as [string, ...any[]]))
     }
+  }
+
+  /**
+   * Calls a specific matomo method which is helpful for any non-push action (getter).
+   * For example `getEcommerceItems`
+   *
+   * @param name The name of the method to be called.
+   * @param args The  arguments which gets passed to the called method.
+   */
+  private callMethod(name: string, ...args: unknown[]): unknown {
+    if (this.asyncTrackers && this.asyncTrackers.length) {
+      const asyncTracker = this.asyncTrackers[0] as Record<
+        string,
+        (args?: unknown) => unknown
+      >
+
+      return asyncTracker[name](...args)
+    }
+    return undefined
   }
 
   /**
