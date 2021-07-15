@@ -18,6 +18,7 @@ Prefix the change with one of these keywords:
 
 - Added: `removeEcommerceItem` and `clearEcommerceCart` action
 - Added: `getEcommerceItems` getter
+- Added: Support callback and other possible data
 
 ## [0.4.0]
 
