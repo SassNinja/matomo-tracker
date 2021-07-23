@@ -84,12 +84,6 @@ class MatomoTracker {
     // // might not work accurately on SPAs because new links (dom elements) are created dynamically without a server-side page reload.
     this.enableLinkTracking(linkTracking)
 
-    // If enabled (default), always use sendBeacon if the browser supports it
-    // Disabling this makes sense when you're waiting for a tracking operation to be done and immediately do a page redirect afterwards.
-    if (alwaysUseSendBeacon === false) {
-      this.callMethod('disableAlwaysUseSendBeacon')
-    }
-
     const doc = document
     const scriptElement = doc.createElement('script')
     const scripts = doc.getElementsByTagName('script')[0]
@@ -100,6 +94,12 @@ class MatomoTracker {
     scriptElement.src = srcUrl || `${normalizedUrlBase}matomo.js`
     scriptElement.onload = () => {
       this.asyncTrackers = window.Matomo.getAsyncTrackers()
+
+      // If enabled (default), always use sendBeacon if the browser supports it
+      // Disabling this makes sense when you're waiting for a tracking operation to be done and immediately do a page redirect afterwards.
+      if (alwaysUseSendBeacon === false) {
+        this.callMethod('disableAlwaysUseSendBeacon')
+      }
     }
 
     if (scripts && scripts.parentNode) {
