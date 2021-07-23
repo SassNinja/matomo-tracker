@@ -23,6 +23,7 @@ export interface UserOptions {
     seconds?: number
   }
   linkTracking?: boolean
+  alwaysUseSendBeacon?: boolean
   configurations?: {
     [key: string]: any
   }
